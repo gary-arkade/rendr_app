@@ -10,6 +10,7 @@
     "killport": "kill $(lsof -t -i:8081)"
   },
   "dependencies": {
+    "qs": "^6.6.0",
     "react": "16.6.3",
     "react-native": "0.58.3",
     "react-native-config": "^0.11.7",

@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 // webview
 import { WebView } from "react-native-webview";
+// qs
+import qs from 'qs';
 
 // singleton
 import { MyWebview } from './src/MyWebview/MyWebview';
@@ -13,21 +15,25 @@ const loginUrl = Config.SITE_LOGIN_URL;
 
 // header
 let header = {
-    "Content-type": "application/json; charset=UTF-8"
+    'Accept': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded'
 };
 
-// need to use double quote
-let body = JSON.stringify({
+let loginObj = {
     "form_type": "customer_login",
     "customer[email]": "gary@arkade.com.au",
     "customer[password]": "test1234"
-});
+};
+let loginStr = qs.stringify(loginObj);
+
+console.log('-- test --');
+console.log(loginStr);
 
 // header, body, post
 const sourceObj = {
     uri: loginUrl,
     headers: header,
-    body: body,
+    body: loginStr,
     method:'POST'
 };
 
