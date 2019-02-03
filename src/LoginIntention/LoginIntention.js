@@ -18,7 +18,7 @@ export default class LoginIntention extends Component {
     }
 
     render() {
-        const loginUrl = Config.SITE_LOGIN_URL;
+        const loginUrl = Config.LOGIN_URL;
 
         let header = {
             'Accept': 'application/json',

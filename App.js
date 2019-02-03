@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
+// login with session
 import LoginIntention from './src/LoginIntention/LoginIntention';
+// account
 import Account from './src/Account/Account';
+// logout
 import Logout from './src/Logout/Logout';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
-// stack
+// route
 const RootStack = createStackNavigator(
     {
         LoginIntention: {
