@@ -3,9 +3,19 @@ import React, {Component} from 'react';
 import LoginIntention from './src/LoginIntention/LoginIntention';
 // account
 import Account from './src/Account/Account';
+// login
+import Login from './src/Login/Login';
 // logout
 import Logout from './src/Logout/Logout';
+
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from "redux-thunk";
+import { rootReducer } from './src/rootReducer/rootReducer';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
+
+// store
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 // route
 const RootStack = createStackNavigator(
@@ -16,12 +26,15 @@ const RootStack = createStackNavigator(
         Account: {
             screen: Account,
         },
+        Login: {
+            screen: Login,
+        },
         Logout: {
             screen: Logout,
         }
     },
     {
-        initialRouteName: 'LoginIntention',
+        initialRouteName: 'Login',
     }
 );
 
@@ -31,6 +44,10 @@ const AppContainer = createAppContainer(RootStack);
 // display
 export default class App extends React.Component {
     render() {
-        return <AppContainer />;
+        return (
+            <Provider store={store}>
+                <AppContainer />
+            </Provider>
+        )
     }
 }

@@ -10,13 +10,17 @@
     "killport": "kill $(lsof -t -i:8081)"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "qs": "^6.6.0",
     "react": "16.6.3",
     "react-native": "0.58.3",
     "react-native-config": "^0.11.7",
     "react-native-gesture-handler": "^1.0.15",
     "react-native-webview": "^4.0.0",
-    "react-navigation": "^3.0.9"
+    "react-navigation": "^3.0.9",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-core": "^7.0.0-bridge.0",

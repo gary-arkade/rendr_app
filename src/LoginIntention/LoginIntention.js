@@ -13,12 +13,12 @@ export default class LoginIntention extends Component {
         super(props);
     }
 
-    goToCart() {
-
-    }
-
     render() {
         const loginUrl = Config.LOGIN_URL;
+
+        const { navigation } = this.props;
+        const email = navigation.getParam('email', false);
+        const password = navigation.getParam('password', false);
 
         let header = {
             'Accept': 'application/json',
@@ -27,8 +27,8 @@ export default class LoginIntention extends Component {
 
         let loginObj = {
             "form_type": "customer_login",
-            "customer[email]": "gary@arkade.com.au",
-            "customer[password]": "test1234"
+            "customer[email]": email,
+            "customer[password]": password
         };
 
         let loginStr = qs.stringify(loginObj);
