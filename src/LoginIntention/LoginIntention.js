@@ -3,7 +3,6 @@ import { Button, View } from 'react-native';
 import { WebView } from "react-native-webview";
 import qs from 'qs';
 import Config from "react-native-config";
-import axios from "axios";
 
 export class LoginIntention extends Component {
     // disable back button
@@ -11,54 +10,11 @@ export class LoginIntention extends Component {
         headerLeft: null
     }
 
-    constructor(props, ctx) {
-        super(props, ctx);
-        this.state = { html: null };
+    // init
+    constructor(props) {
+        // super
+        super(props);
     }
-
-    componentWillMount() {
-        // Have to hardcode
-        const loginUrl = 'https://rendrtrade.myshopify.com/account/login';
-
-        // screen param
-        const email = this.props.navigation.getParam('email', false);
-        const password = this.props.navigation.getParam('password', false);
-
-        // header
-        let header = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        };
-
-        // param
-        let loginObj = {
-            "form_type": "customer_login",
-            "customer[email]": email,
-            "customer[password]": password
-        };
-
-        // str
-        let loginStr = qs.stringify(loginObj);
-
-        // post
-        axios({
-            url: loginUrl,
-            method: 'POST',
-            config: { headers: header},
-            data: loginStr,
-        }).then(res => {
-
-            // test
-            console.log('-- login intention axios text --');
-            this.setState({ html: res.data });
-            console.log(res.data);
-
-        }).catch(err => {
-            console.log('-- login intention error, axios --')
-            console.error(err);
-        });
-    }
-
 
     // e.g. always call
     _onNavigationStateChange = (event) => {
@@ -99,6 +55,34 @@ export class LoginIntention extends Component {
     }
 
     render() {
+        const loginUrl = Config.LOGIN_URL;
+
+        // screen param
+        const email = this.props.navigation.getParam('email', false);
+        const password = this.props.navigation.getParam('password', false);
+
+        // put screen param into the state as well
+
+        let header = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
+
+        let loginObj = {
+            "form_type": "customer_login",
+            "customer[email]": email,
+            "customer[password]": password
+        };
+
+        let loginStr = qs.stringify(loginObj);
+
+        const sourceObj = {
+            uri: loginUrl,
+            headers: header,
+            body: loginStr,
+            method:'POST'
+        };
+
         // still equal login, so login fail
         const isNotLogin = `
             (function() { 
@@ -107,41 +91,34 @@ export class LoginIntention extends Component {
         `;
 
         return (
-            this.state.html ?
-                <View style={{ flex: 1 }}>
-                    <View style={{ height: 20 }} />
-                    <WebView
-                        // ref
-                        ref={ref => (this.webview = ref)}
+            <View style={{ flex: 1 }}>
+                <View style={{ height: 20 }} />
+                <WebView
+                    // ref
+                    ref={ref => (this.webview = ref)}
+                    // source
+                    source={sourceObj}
+                    // error
+                    onError={console.error.bind(console, 'error')}
+                    // no bounce
+                    bounces={false}
+                    // load with req
+                    onShouldStartLoadWithRequest={() => true}
+                    // yes, js
+                    javaScriptEnabledAndroid={true}
 
-                        // source
-                        source={{
-                            html: this.state.html
-                        }}
+                    injectedJavaScript={
+                        isNotLogin
+                    }
 
-                        // error
-                        onError={console.error.bind(console, 'error')}
-                        // no bounce
-                        bounces={false}
-                        // load with req
-                        onShouldStartLoadWithRequest={() => true}
-                        // yes, js
-                        javaScriptEnabledAndroid={true}
+                    onNavigationStateChange={this._onNavigationStateChange}
 
-                        injectedJavaScript={
-                            isNotLogin
-                        }
-
-                        onNavigationStateChange={this._onNavigationStateChange}
-
-                        // loading
-                        startInLoadingState={true}
-                        // style
-                        style={{ flex: 1 }}
-                    />
-                </View>
-                :
-                null
+                    // loading
+                    startInLoadingState={true}
+                    // style
+                    style={{ flex: 1 }}
+                />
+            </View>
         );
     }
 }
