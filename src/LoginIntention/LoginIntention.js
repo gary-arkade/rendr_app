@@ -30,10 +30,6 @@ export class LoginIntention extends Component {
                     // test
                     console.log('not able to login');
 
-                    this.props.navigation.navigate('Login', {
-                        error: 'Login fail'
-                    });
-
                     // back to login screen
                     this.props.navigation.navigate('Login', {
                         error: 'Username or password is incorrect.'
