@@ -3,8 +3,6 @@ import { Button, View } from 'react-native';
 import { WebView } from "react-native-webview";
 import qs from 'qs';
 import Config from "react-native-config";
-import { connect } from 'react-redux';
-import { saveLoginDetailAPI } from './reducer';
 
 export class LoginIntention extends Component {
     // disable back button
@@ -36,17 +34,16 @@ export class LoginIntention extends Component {
                         error: 'Login fail'
                     });
 
-                    // save email (fail), password (fail) in reducer
-
+                    // back to login screen
+                    this.props.navigation.navigate('Login', {
+                        error: 'Username or password is incorrect.'
+                    });
                 } else {
                     // test
                     console.log('able to login with state:');
                     console.log(isNotLogin);
 
-                    // save email, password in reducer
-                    //this.props.saveLoginDetailAPI(email, password);
-
-                    // go to another display component with user & pass
+                    // go to the real display component with user & pass
                     this.props.navigation.navigate('Display', {
                         email,
                         password
@@ -130,18 +127,4 @@ export class LoginIntention extends Component {
     }
 }
 
-
-const mapStateToProps = state => {
-    return {
-
-    };
-};
-
-// method
-const mapDispatchToProps = dispatch => {
-    return {
-        saveLoginDetailAPI: (email, password) => dispatch(saveLoginDetailAPI(email, password))
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginIntention);
+export default LoginIntention;

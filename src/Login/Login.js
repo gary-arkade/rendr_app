@@ -12,11 +12,6 @@ import {
     Alert
 } from 'react-native';
 
-// super
-import { connect } from 'react-redux';
-//
-//import { loginApi } from "./reducer";
-
 class Login extends Component {
 
     // parent
@@ -52,7 +47,7 @@ class Login extends Component {
     render() {
         let error = this.props.navigation.getParam('error', false);
 
-        if(this.props.loginIntentionIsLogin === false) {
+        if(true) {
             return (
                 // container: center
                 // input container: radius stuff
@@ -196,23 +191,4 @@ const styles = StyleSheet.create({
     }
 });
 
-
-const mapStateToProps = state => {
-    return {
-        loginIntentionEmail: state.loginIntentionReducer.email,
-        loginIntentionIsLogin: state.loginIntentionReducer.isLogin,
-
-    };
-};
-
-// method
-const mapDispatchToProps = dispatch => {
-    return {
-
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
-
-
-//export default Login;
+export default Login;
