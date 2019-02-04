@@ -16,26 +16,31 @@ export class LoginIntention extends Component {
         this.state = { html: null };
     }
 
-    componentDidMount() {
-        const loginUrl = Config.LOGIN_URL;
+    componentWillMount() {
+        // Have to hardcode
+        const loginUrl = 'https://rendrtrade.myshopify.com/account/login';
 
         // screen param
         const email = this.props.navigation.getParam('email', false);
         const password = this.props.navigation.getParam('password', false);
 
+        // header
         let header = {
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded'
         };
 
+        // param
         let loginObj = {
             "form_type": "customer_login",
             "customer[email]": email,
             "customer[password]": password
         };
 
+        // str
         let loginStr = qs.stringify(loginObj);
 
+        // post
         axios({
             url: loginUrl,
             method: 'POST',
@@ -44,10 +49,10 @@ export class LoginIntention extends Component {
         }).then(res => {
 
             // test
-            console.log('-- login intention axios text --')
+            console.log('-- login intention axios text --');
+            this.setState({ html: res.data });
             console.log(res.data);
 
-            this.setState({ html: res.data });
         }).catch(err => {
             console.log('-- login intention error, axios --')
             console.error(err);
@@ -101,8 +106,6 @@ export class LoginIntention extends Component {
             )()
         `;
 
-        const loginUrl = Config.LOGIN_URL;
-
         return (
             this.state.html ?
                 <View style={{ flex: 1 }}>
@@ -113,8 +116,7 @@ export class LoginIntention extends Component {
 
                         // source
                         source={{
-                            html: this.state.html,
-                            baseUrl: loginUrl,
+                            html: this.state.html
                         }}
 
                         // error
@@ -130,7 +132,7 @@ export class LoginIntention extends Component {
                             isNotLogin
                         }
 
-                        //onNavigationStateChange={this._onNavigationStateChange}
+                        onNavigationStateChange={this._onNavigationStateChange}
 
                         // loading
                         startInLoadingState={true}

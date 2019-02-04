@@ -17,7 +17,7 @@ export default class Display extends Component {
     }
 
     render() {
-        const url = Config.INIT_DISPLAY_URL
+        const url = Config.INIT_DISPLAY_URL;
 
         // screen param
         const email = this.props.navigation.getParam('email', false);
