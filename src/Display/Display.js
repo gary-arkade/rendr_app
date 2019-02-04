@@ -2,22 +2,26 @@ import React, {Component} from 'react';
 import { Button, View } from 'react-native';
 import { WebView } from "react-native-webview";
 import Config from "react-native-config";
-import LoginIntention from "../LoginIntention/LoginIntention";
 
-
-export default class Account extends Component {
+export default class Display extends Component {
     // init
     constructor(props) {
         // super
         super(props);
     }
 
-    backHome() {
-
-    }
-
     render() {
-        const url = Config.ACCOUNT_URL
+        const url = Config.INIT_DISPLAY_URL
+
+        // screen param
+        const email = this.props.navigation.getParam('email', false);
+        const password = this.props.navigation.getParam('password', false);
+
+        // save in key chain?
+        console.log('-- display --');
+        console.log(email);
+        console.log(password);
+
 
         const sourceObj = {
             uri: url,
@@ -44,15 +48,6 @@ export default class Account extends Component {
                     startInLoadingState={true}
                     // style
                     style={{ flex: 1 }}
-                />
-
-                <Button
-                    title="Go to LoginIntention"
-                    onPress={() => this.props.navigation.navigate('LoginIntention')}
-                />
-                <Button
-                    title="Go to Logout"
-                    onPress={() => this.props.navigation.navigate('Logout')}
                 />
             </View>
         );

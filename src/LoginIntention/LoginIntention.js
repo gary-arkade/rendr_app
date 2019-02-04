@@ -3,7 +3,6 @@ import { Button, View } from 'react-native';
 import { WebView } from "react-native-webview";
 import qs from 'qs';
 import Config from "react-native-config";
-import Account from "../Account/Account";
 import { connect } from 'react-redux';
 import { saveLoginDetailAPI } from './reducer';
 
@@ -19,7 +18,7 @@ export class LoginIntention extends Component {
         super(props);
     }
 
-    // e.g. web view change?
+    // e.g. always call
     _onNavigationStateChange = (event) => {
 
         const email = this.props.navigation.getParam('email', false);
@@ -45,7 +44,13 @@ export class LoginIntention extends Component {
                     console.log(isNotLogin);
 
                     // save email, password in reducer
-                    this.props.saveLoginDetailAPI(email, password);
+                    //this.props.saveLoginDetailAPI(email, password);
+
+                    // go to another display component with user & pass
+                    this.props.navigation.navigate('Display', {
+                        email,
+                        password
+                    });
                 }
             } else {
                 console.log('still waiting jsEvaluationValue');
@@ -119,15 +124,6 @@ export class LoginIntention extends Component {
                     startInLoadingState={true}
                     // style
                     style={{ flex: 1 }}
-                />
-
-                <Button
-                    title="Go to Account"
-                    onPress={() => this.props.navigation.navigate('Account')}
-                />
-                <Button
-                    title="Go to Logout"
-                    onPress={() => this.props.navigation.navigate('Logout')}
                 />
             </View>
         );

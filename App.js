@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 // login with session
 import LoginIntention from './src/LoginIntention/LoginIntention';
-// account
-import Account from './src/Account/Account';
+// display
+import Display from './src/Display/Display';
 // login
 import Login from './src/Login/Login';
 // logout
@@ -23,8 +23,8 @@ const RootStack = createStackNavigator(
         LoginIntention: {
             screen: LoginIntention,
         },
-        Account: {
-            screen: Account,
+        Display: {
+            screen: Display,
         },
         Login: {
             screen: Login,
