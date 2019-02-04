@@ -50,6 +50,7 @@ export const loginReducer = (state = initState, action) => {
     }
 }
 
+/*
 export const login = () => {
     return {
         type: LOGIN,
@@ -72,11 +73,18 @@ export const loginFail = (res) => {
         payload: res
     };
 };
+*/
 
-export const loginApi = (username, password) => {
+export const login = (email, password) => {
+    return {
+        type: LOGIN,
+        loading: true,
+    };
+}
+
+export const loginApi = (email, password) => {
     return dispatch => {
-        dispatch(login());
-
+        dispatch(login(email, password));
 
 
         /*

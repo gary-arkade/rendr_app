@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 // super
-import { connect } from 'react-redux';
+//import { connect } from 'react-redux';
 //
 //import { loginApi } from "./reducer";
 
@@ -22,43 +22,24 @@ class Login extends Component {
     // parent
     constructor(props) {
         super(props);
+
         this.state = {
             email: false,
             password: false,
-            loading: false,
-            error: false,
+            isLogin: false
         }
-
     }
-
-    /*
-    handleSubmit(e) {
-        e.preventDefault();
-
-        this.setState({ submitted: true });
-        const { username, password } = this.state;
-
-
-        const { dispatch } = this.props;
-        if (username && password) {
-            dispatch(userActions.login(username, password));
-        }
-
-    }
-    */
 
     onLogin = () => {
         const { email, password } = this.state;
 
         if (email && password) {
-            //this.props.loginApi(username, password);
-
-            // nav.nav to loginIntention with param
-
+            //this.props.loginApi(email, password);
             this.props.navigation.navigate('LoginIntention', {
-                username: email,
-                password: password,
+                email,
+                password
             });
+
         } else {
             Alert.alert("Error", "Missing username or password");
         }
@@ -69,7 +50,8 @@ class Login extends Component {
     }
 
     render() {
-        let { email, loading, isLogin, error } = this.props;
+        let { isLogin } = this.state;
+        let error = this.props.navigation.getParam('error', false);
 
         if(isLogin === false) {
             return (
@@ -77,7 +59,11 @@ class Login extends Component {
                 // input container: radius stuff
                 <View style={styles.container}>
 
-                    <Text style={{color: 'red', marginBottom: 10}}>{error}</Text>
+                    {error ?
+                        <Text style={{color: 'red', marginBottom: 10}}>{error}</Text>
+                        :
+                        null
+                    }
 
                     <Text style={{marginBottom: 20}}>RENDR</Text>
 
@@ -211,7 +197,7 @@ const styles = StyleSheet.create({
     }
 });
 
-// state
+/*
 const mapStateToProps = state => {
     return {
         email: state.loginReducer.email,
@@ -224,8 +210,11 @@ const mapStateToProps = state => {
 // method
 const mapDispatchToProps = dispatch => {
     return {
-        //loginApi: (email, password) => dispatch(loginApi(email, password))
+        loginApi: (email, password) => dispatch(loginApi(email, password))
     }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
+*/
+
+export default Login;

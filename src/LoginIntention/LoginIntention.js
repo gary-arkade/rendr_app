@@ -13,12 +13,32 @@ export default class LoginIntention extends Component {
         super(props);
     }
 
+    // e.g. web view change?
+    _onNavigationStateChange = (event) => {
+        if(event.hasOwnProperty('jsEvaluationValue')) {
+            const isNotLogin = event.jsEvaluationValue;
+            if(isNotLogin === '1') {
+                // test
+                console.log('not able to login');
+
+                this.props.navigation.navigate('Login', {
+                    error: 'Login fail'
+                });
+
+            } else {
+                // test
+                console.log('able to login');
+                console.log(isNotLogin);
+            }
+        } else {
+            console.log('still waiting jsEvaluationValue');
+        }
+    }
+
     render() {
         const loginUrl = Config.LOGIN_URL;
-
-        const { navigation } = this.props;
-        const email = navigation.getParam('email', false);
-        const password = navigation.getParam('password', false);
+        const email = this.props.navigation.getParam('email', false);
+        const password = this.props.navigation.getParam('password', false);
 
         let header = {
             'Accept': 'application/json',
@@ -40,6 +60,13 @@ export default class LoginIntention extends Component {
             method:'POST'
         };
 
+        // still equal login, so login fail
+        const isNotLogin = `
+            (function() { 
+                return document.querySelector("h1").innerHTML === "Login" }
+            )()
+        `;
+
         return (
             <View style={{ flex: 1 }}>
                 <View style={{ height: 20 }} />
@@ -56,6 +83,13 @@ export default class LoginIntention extends Component {
                     onShouldStartLoadWithRequest={() => true}
                     // yes, js
                     javaScriptEnabledAndroid={true}
+
+                    injectedJavaScript={
+                        isNotLogin
+                    }
+
+                    onNavigationStateChange={this._onNavigationStateChange}
+
                     // loading
                     startInLoadingState={true}
                     // style
