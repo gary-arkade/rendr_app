@@ -4,9 +4,15 @@ import { WebView } from "react-native-webview";
 import qs from 'qs';
 import Config from "react-native-config";
 import Account from "../Account/Account";
+import { connect } from 'react-redux';
+import { saveLoginDetailAPI } from './reducer';
 
+export class LoginIntention extends Component {
+    // disable back button
+    static navigationOptions = {
+        headerLeft: null
+    }
 
-export default class LoginIntention extends Component {
     // init
     constructor(props) {
         // super
@@ -15,30 +21,49 @@ export default class LoginIntention extends Component {
 
     // e.g. web view change?
     _onNavigationStateChange = (event) => {
-        if(event.hasOwnProperty('jsEvaluationValue')) {
-            const isNotLogin = event.jsEvaluationValue;
-            if(isNotLogin === '1') {
-                // test
-                console.log('not able to login');
 
-                this.props.navigation.navigate('Login', {
-                    error: 'Login fail'
-                });
+        const email = this.props.navigation.getParam('email', false);
+        const password = this.props.navigation.getParam('password', false);
 
+        // if we have email and password, assume coming from Login.js to here
+        if(email && password) {
+            if (event.hasOwnProperty('jsEvaluationValue')) {
+                const isNotLogin = event.jsEvaluationValue;
+                if (isNotLogin === '1') {
+                    // test
+                    console.log('not able to login');
+
+                    this.props.navigation.navigate('Login', {
+                        error: 'Login fail'
+                    });
+
+                    // save email (fail), password (fail) in reducer
+
+                } else {
+                    // test
+                    console.log('able to login with state:');
+                    console.log(isNotLogin);
+
+                    // save email, password in reducer
+                    this.props.saveLoginDetailAPI(email, password);
+                }
             } else {
-                // test
-                console.log('able to login');
-                console.log(isNotLogin);
+                console.log('still waiting jsEvaluationValue');
             }
         } else {
-            console.log('still waiting jsEvaluationValue');
+
+            console.log('-- else --');
         }
     }
 
     render() {
         const loginUrl = Config.LOGIN_URL;
+
+        // screen param
         const email = this.props.navigation.getParam('email', false);
         const password = this.props.navigation.getParam('password', false);
+
+        // put screen param into the state as well
 
         let header = {
             'Accept': 'application/json',
@@ -108,3 +133,19 @@ export default class LoginIntention extends Component {
         );
     }
 }
+
+
+const mapStateToProps = state => {
+    return {
+
+    };
+};
+
+// method
+const mapDispatchToProps = dispatch => {
+    return {
+        saveLoginDetailAPI: (email, password) => dispatch(saveLoginDetailAPI(email, password))
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginIntention);
