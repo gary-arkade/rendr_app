@@ -23,6 +23,9 @@ class Login extends Component {
             password: false,
             isLogin: false
         }
+
+        // test
+        console.log('-- into Login component --');
     }
 
     onLogin = () => {

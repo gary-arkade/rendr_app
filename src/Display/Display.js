@@ -14,6 +14,9 @@ export default class Display extends Component {
     constructor(props) {
         // super
         super(props);
+
+        //test
+        console.log('-- into Display component --');
     }
 
     render() {
@@ -26,7 +29,7 @@ export default class Display extends Component {
         // async
         if(email && password) {
             // test
-            console.log('-- keep calling display? --');
+            console.log('-- doing key chain stuff --');
 
             Keychain.setGenericPassword(email, password).then((res) => {
                 // test
