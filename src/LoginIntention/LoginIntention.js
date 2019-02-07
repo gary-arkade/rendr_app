@@ -2,17 +2,17 @@ import React, {Component} from 'react';
 import { Button, View, Platform } from 'react-native';
 import { WebView } from "react-native-webview";
 import qs from 'qs';
-import Config from "react-native-config";
+//import Config from "react-native-config";
 
-const isNotLoginIos = `
+const isLoginIos = `
     (function() { 
-        return document.querySelector("h1").innerHTML === "Login" 
+        return document.querySelector("h1").innerHTML === "My Account" 
     })()
 `;
 
-const isNotLoginAndroid = `
+const isLoginAndroid = `
     (function() {
-        window.postMessage(document.querySelector("h1").innerHTML === "Login")
+        window.postMessage(document.querySelector("h1").innerHTML === "My Account")
     })()
 `;
 
@@ -34,7 +34,6 @@ export class LoginIntention extends Component {
 
     // e.g. always call
     _onNavigationStateChange = (event) => {
-
         const email = this.props.navigation.getParam('email', false);
         const password = this.props.navigation.getParam('password', false);
 
@@ -45,15 +44,10 @@ export class LoginIntention extends Component {
         // if we have email and password, assume coming from Login.js to here
         if(email && password) {
 
-            // test
-            console.log('-- pass in email and pass --');
-            console.log(email);
-            console.log(password);
-
             // android does not have this
             if (event.hasOwnProperty('jsEvaluationValue')) {
-                const isNotLogin = event.jsEvaluationValue;
-                if (isNotLogin === '1') {
+                const isLogin = event.jsEvaluationValue;
+                if (isLogin === '1') {
                     // test
                     console.log('not able to login');
 
@@ -64,7 +58,7 @@ export class LoginIntention extends Component {
                 } else {
                     // test
                     console.log('able to login with state:');
-                    console.log(isNotLogin);
+                    console.log(isLogin);
 
                     // go to the real display component with user & pass
                     this.props.navigation.navigate('Display', {
@@ -81,15 +75,39 @@ export class LoginIntention extends Component {
     }
 
 
-    _onLoad = () => {
+    _onLoadAndroid() {
+        //test
+        console.log('-- _onLoadAndroid --');
 
-        console.log('-- on load --');
-        this.webView.injectJavaScript(isNotLoginAndroid);
+        // we inject js, then inside js, we do post msg
+        this.webView.injectJavaScript(isLoginAndroid);
     }
 
+    _onMessageAndroid(event) {
+        console.log('-- on msg --');
+
+        if(event.nativeEvent.data === 'true') {
+            // test
+            console.log('able to login');
+
+            const email = this.props.navigation.getParam('email', false);
+            const password = this.props.navigation.getParam('password', false);
+            this.props.navigation.navigate('Display', {
+                email,
+                password
+            });
+        } else {
+            // test
+            console.log('not able to login');
+            this.props.navigation.navigate('Login', {
+                error: 'Username or password is incorrect.'
+            });
+        }
+    }
 
     render() {
-        const loginUrl = Config.LOGIN_URL;
+        // will put this into config
+        const loginUrl = 'https://rendrtrade.myshopify.com/account/login';
 
         const email = this.props.navigation.getParam('email', false);
         const password = this.props.navigation.getParam('password', false);
@@ -122,25 +140,11 @@ export class LoginIntention extends Component {
                     <WebView
                         ref={node => { this.webView = node; }}
 
-                        source={sourceObj}
-
-                        onError={console.error.bind(console, 'error')}
-
-                        bounces={false}
-
-                        onShouldStartLoadWithRequest={() => true}
-
-                        javaScriptEnabledAndroid={true}
-
                         injectedJavaScript={
-                            isNotLoginIos
+                            isLoginIos
                         }
 
                         onNavigationStateChange={this._onNavigationStateChange}
-
-                        startInLoadingState={true}
-
-                        style={{flex: 1}}
                     />
 
                     :
@@ -150,22 +154,11 @@ export class LoginIntention extends Component {
 
                         source={sourceObj}
 
-                        onError={console.error.bind(console, 'error')}
+                        mixedContentMode={'compatibility'}
 
-                        bounces={false}
+                        onLoad={this._onLoadAndroid.bind(this)}
 
-                        onShouldStartLoadWithRequest={() => true}
-
-                        javaScriptEnabledAndroid={true}
-
-                        onNavigationStateChange={this._onNavigationStateChange}
-
-                        onLoad={this._onLoad.bind(this)}
-
-                        // loading
-                        startInLoadingState={true}
-                        // style
-                        style={{flex: 1}}
+                        onMessage={this._onMessageAndroid.bind(this)}
                     />
                 }
             </View>

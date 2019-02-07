@@ -20,7 +20,7 @@ export default class Display extends Component {
     }
 
     render() {
-        const url = Config.INIT_DISPLAY_URL;
+        const url = 'https://rendrtrade.myshopify.com/account';
 
         // screen param
         const email = this.props.navigation.getParam('email', false);
