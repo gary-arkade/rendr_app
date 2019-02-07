@@ -49,21 +49,21 @@ export class LoginIntention extends Component {
                 const isLogin = event.jsEvaluationValue;
                 if (isLogin === '1') {
                     // test
-                    console.log('not able to login');
-
-                    // back to login screen
-                    this.props.navigation.navigate('Login', {
-                        error: 'Username or password is incorrect.'
-                    });
-                } else {
-                    // test
-                    console.log('able to login with state:');
-                    console.log(isLogin);
+                    console.log('able to login');
 
                     // go to the real display component with user & pass
                     this.props.navigation.navigate('Display', {
                         email,
                         password
+                    });
+                } else {
+                    // test
+                    console.log('not able to login with state:');
+                    console.log(isLogin);
+
+                    // back to login screen
+                    this.props.navigation.navigate('Login', {
+                        error: 'Username or password is incorrect.'
                     });
                 }
             } else {
@@ -84,6 +84,7 @@ export class LoginIntention extends Component {
     }
 
     _onMessageAndroid(event) {
+        //test
         console.log('-- on msg --');
 
         if(event.nativeEvent.data === 'true') {
@@ -140,11 +141,25 @@ export class LoginIntention extends Component {
                     <WebView
                         ref={node => { this.webView = node; }}
 
+                        source={sourceObj}
+
+                        onError={console.error.bind(console, 'error')}
+
+                        bounces={false}
+
+                        onShouldStartLoadWithRequest={() => true}
+
+                        javaScriptEnabledAndroid={true}
+
                         injectedJavaScript={
                             isLoginIos
                         }
 
                         onNavigationStateChange={this._onNavigationStateChange}
+
+                        startInLoadingState={true}
+
+                        style={{flex: 1}}
                     />
 
                     :

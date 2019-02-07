@@ -5,8 +5,6 @@ import LoginIntention from './src/LoginIntention/LoginIntention';
 import Display from './src/Display/Display';
 // login
 import Login from './src/Login/Login';
-// logout
-import Logout from './src/Logout/Logout';
 
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -28,9 +26,6 @@ const RootStack = createStackNavigator(
         },
         Login: {
             screen: Login,
-        },
-        Logout: {
-            screen: Logout,
         }
     },
     {
